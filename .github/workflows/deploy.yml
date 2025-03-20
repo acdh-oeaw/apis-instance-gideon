@@ -3,8 +3,8 @@ on:
   push:
     # Run deployment only on pushes to main, not other branches
     branches: [main]
-    # Allows you to run this workflow manually from the Actions tab or through HTTP API
-    workflow_dispatch:
+  # Allows you to run this workflow manually from the Actions tab or through HTTP API
+  workflow_dispatch:
 
 jobs:
   deploy:
