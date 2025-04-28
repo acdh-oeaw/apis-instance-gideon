@@ -22,7 +22,7 @@ class Profession(GenericModel, SimpleLabelModel):
         verbose_name_plural = _("Professions")
 
 
-class Person(VersionMixin, AbstractEntity, E21_Person):
+class Person(E21_Person, VersionMixin, AbstractEntity):
     _default_search_fields = ["forename", "surname"]
     old_id = models.IntegerField(editable=False)
     # VORNAME = forename
@@ -63,7 +63,7 @@ class Person(VersionMixin, AbstractEntity, E21_Person):
     field_comments = ArrayField(models.CharField(), null=True, help_text="NG_COMMENTS")
 
 
-class Place(AbstractEntity, E53_Place):
+class Place(E53_Place, AbstractEntity):
     alternative_labels = ArrayField(models.CharField(), null=True)
 
 
@@ -99,7 +99,6 @@ class Publication(GenericModel, models.Model):
         if self.delivery:
             ret += f", {self.delivery}"
         return ret
-
 
 class BornIn(Relation):
     # GEBURTSTAGMONAT, GEBURTSJAHR, GEBURTSORT_ALT, GEBURTSORT_HEUTE, K_LAND_ID_GEBURT_ALT, K_LAND_ID_GEBURT_HEUTE
