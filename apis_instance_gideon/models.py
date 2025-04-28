@@ -23,6 +23,7 @@ class Profession(GenericModel, SimpleLabelModel):
 
 
 class Person(VersionMixin, AbstractEntity, E21_Person):
+    _default_search_fields = ["forename", "surname"]
     old_id = models.IntegerField(editable=False)
     # VORNAME = forename
     # NACHNAME = surname
