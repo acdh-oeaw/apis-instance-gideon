@@ -1,0 +1,4 @@
+{% load static %}
+{% for attachment in value %}
+<a href="{% static "/attachments/" %}{{ attachment }}">{{ attachment }}</a>
+{% endfor %}
