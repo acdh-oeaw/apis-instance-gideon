@@ -49,7 +49,7 @@ persistence:
     attachments:
       name: "attachments"
       mount:
-        path: "/attchments"
+        path: "/attachments"
       claim:
         size: "5Gi"
         accessMode: "ReadWriteOnce"
