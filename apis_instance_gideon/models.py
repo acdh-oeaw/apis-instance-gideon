@@ -73,6 +73,9 @@ class Quote(GenericModel, models.Model):
     quotation_shortform = models.CharField(null=True)
     attachments = ArrayField(models.CharField(), null=True, help_text="NG_ATTACHMENTS")
 
+    def __str__(self):
+        return self.quotation or ""
+
 
 class Corrigendum(GenericModel, models.Model):
     old_id = models.IntegerField(editable=False)
@@ -90,6 +93,12 @@ class Publication(GenericModel, models.Model):
     page_bio = models.CharField(null=True)
     page_number = models.CharField(null=True)
     mentioned = models.IntegerField(null=True)
+
+    def __str__(self):
+        ret = f"Vol: {self.volume}"
+        if self.delivery:
+            ret += f", {self.delivery}"
+        return ret
 
 
 class BornIn(Relation):
