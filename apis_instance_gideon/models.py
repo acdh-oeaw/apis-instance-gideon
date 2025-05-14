@@ -101,7 +101,13 @@ class Publication(GenericModel, models.Model):
         return ret
 
 
-class BornIn(Relation):
+class GideonRelation(Relation):
+    class Meta:
+        abstract = True
+        ordering = ["id"]
+
+
+class BornIn(GideonRelation):
     # GEBURTSTAGMONAT, GEBURTSJAHR, GEBURTSORT_ALT, GEBURTSORT_HEUTE, K_LAND_ID_GEBURT_ALT, K_LAND_ID_GEBURT_HEUTE
     # GEBURT_ANMERKUNG, GEBURTSDATEN_OK
     subj_model = Person
@@ -114,7 +120,7 @@ class BornIn(Relation):
     comment_place = models.TextField()
 
 
-class DiedIn(Relation):
+class DiedIn(GideonRelation):
     # STERBETAGMONAT, STERBEJAHR, STERBEORT_ALT, STERBEORT_HEUTE, K_LAND_ID_TOD_ALT, K_LAND_ID_TOD_HEUTE,
     # STERBE_ANMERKUNG, STERBEDATEN_OK
     subj_model = Person
@@ -127,16 +133,16 @@ class DiedIn(Relation):
     comment_place = models.TextField()
 
 
-class PersonQuote(Relation):
+class PersonQuote(GideonRelation):
     subj_model = Person
     obj_model = Quote
 
 
-class PersonCorrigendum(Relation):
+class PersonCorrigendum(GideonRelation):
     subj_model = Person
     obj_model = Corrigendum
 
 
-class PersonPublication(Relation):
+class PersonPublication(GideonRelation):
     subj_model = Person
     obj_model = Publication
