@@ -1,3 +1,4 @@
+from django.contrib.contenttypes.models import ContentType
 from django.core.management.base import BaseCommand
 from collections import defaultdict
 import csv
@@ -5,6 +6,7 @@ import json
 import pathlib
 from apis_instance_gideon.models import Person, Place, Profession, ProfessionCategory, BornIn, DiedIn, Corrigendum, PersonCorrigendum, Publication, PersonPublication, Quote, PersonQuote
 from apis_core.collections.models import SkosCollection
+from apis_core.uris.models import Uri
 
 
 def create_bd_rel(p, row):
@@ -37,6 +39,7 @@ def lookupid(id: int) -> int:
 
 
 def parse_d_biografien(filename):
+    person_content_type = ContentType.objects.get_for_model(Person)
     religionen = {}
     with open(filename.parent / "K_RELIGIONEN.csv") as relgionen_csv:
         for row in csv.DictReader(relgionen_csv):
@@ -114,6 +117,8 @@ def parse_d_biografien(filename):
                 p.save()
                 domains[int(row["DOMAIN"])].add(p)
                 create_bd_rel(p, row)
+                if row["PNDID"]:
+                    Uri.objects.get_or_create(uri=f"https://d-nb.info/gnd/{row['PNDID']}", content_type=person_content_type, object_id=p.id)
             else:
                 original_id = int(row["D_BIOGRAFIEN_ORIGINAL_ID"])
                 _id = int(row["ID"])
