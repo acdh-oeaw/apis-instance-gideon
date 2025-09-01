@@ -77,7 +77,7 @@ def parse_d_biografien(filename):
                 p.forename = row["VORNAME"]
                 p.surname = row["NACHNAME"]
                 p.alternative_names = row["WEITERE_NAMENSFORMEN"].split() + weitere_namen.get(row["ID"], [])
-                p.gender = "male" if row["K_GESCHLECHT_ID"] == 1 else "female"
+                p.gender = "male" if row["K_GESCHLECHT_ID"] == "1" else "female"
                 p.title = row["ADELSPRAEDIKAT"]
                 p.ist_adelig = True if row["IST_ADELIG"] == -1 else False
                 p.religion = religionen[row["K_RELIGIONEN_ID"]]
