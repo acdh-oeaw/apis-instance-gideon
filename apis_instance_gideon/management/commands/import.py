@@ -12,10 +12,14 @@ from apis_core.uris.models import Uri
 def create_bd_rel(p, row):
     for bd in ["GEBURT", "STERBE"]:
         bd2 = "GEBURTS" if bd == "GEBURT" else "STERBE"
-        place, _ = Place.objects.get_or_create(label=row[f"{bd2}ORT_HEUTE"])
+        placelabel = row[f"{bd2}ORT_HEUTE"]
+        if placelabel == "?":
+            placelabel = row.get(f"{bd2}ORT_ALT", "?")
+        place, _ = Place.objects.get_or_create(label=placelabel)
         if place_old := row.get("{bd2}ORT_ALT", None):
-            place.alternative_labels.append(place_old)
-            place.save()
+            if place_old != placelabel:
+                place.alternative_labels.append(place_old)
+                place.save()
         date = row[f"{bd2}TAG_TEXT"]
         comment = row[f"{bd}_ANMERKUNG"]
         data_ok = True if row[f"{bd2}DATEN_OK"] == -1 else False
