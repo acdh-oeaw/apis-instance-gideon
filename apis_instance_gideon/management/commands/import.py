@@ -72,7 +72,6 @@ def parse_d_biografien(filename):
         reader = csv.DictReader(csvfile)
         for row in reader:
             if not row["D_BIOGRAFIEN_ORIGINAL_ID"]:
-                continue
                 id_ = int(row["ID"])
                 p, _ = Person.objects.get_or_create(old_id=id_)
                 p.forename = row["VORNAME"]
