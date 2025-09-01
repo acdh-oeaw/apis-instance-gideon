@@ -205,9 +205,5 @@ class Command(BaseCommand):
         parser.add_argument("file", type=pathlib.Path)
 
     def handle(self, *args, **options):
-        #for csv_file in ["d_biografien", "biografie_literatur", "biografien_corrigenda", "biografien_publikationen"]:
-        for csv_file in ["d_biografien", "biografien_publikationen"]:
-            method_name = f"parse_{csv_file}"
-            if method := globals().get(method_name, None):
-                print(method)
-                method(options["file"] / (csv_file.upper() + ".csv"))
+        parse_d_biografien(options["file"] / "D_BIOGRAFIEN.csv")
+        parse_biografien_publikationen(options["file"] / "BIOGRAFIEN_PUBLIKATIONEN.csv")
