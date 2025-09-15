@@ -5,3 +5,7 @@ INSTALLED_APPS = ["apis_instance_gideon"] + INSTALLED_APPS
 INSTALLED_APPS += ["apis_core.uris"]
 
 STATIC_ROOT = "/attachments/static"
+
+MIDDLEWARE += [  # noqa: F405
+    "apis_core.generic.middleware.HtmxMessageMiddleware",
+]
