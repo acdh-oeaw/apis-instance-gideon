@@ -52,7 +52,7 @@ persistence:
         path: "/attachments"
       claim:
         size: "5Gi"
-        accessMode: "ReadWriteOnce"
+        accessMode: "ReadWriteMany"
 
 securityContext:
   fsGroup: 1000
