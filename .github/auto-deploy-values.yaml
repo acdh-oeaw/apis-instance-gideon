@@ -49,13 +49,6 @@ readinessProbe:
 persistence:
   enabled: true
   volumes:
-    attachments:
-      name: "attachments"
-      mount:
-        path: "/attachments"
-      claim:
-        size: "5Gi"
-        accessMode: "ReadWriteOnce"
     data:
       name: "data"
       mount:
