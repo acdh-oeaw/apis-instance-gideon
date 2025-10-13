@@ -5,6 +5,9 @@ image:
   tag: "$tag"
   pullPolicy: Always
 
+nodeSelector:
+  kubernetes.io/hostname : acdh-cluster7
+
 extraLabels:
   "ID": "$service_id"
 
