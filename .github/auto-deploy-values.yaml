@@ -56,6 +56,13 @@ persistence:
       claim:
         size: "5Gi"
         accessMode: "ReadWriteOnce"
+    data:
+      name: "data"
+      mount:
+        path: "/data"
+      claim:
+        size: "5Gi"
+        accessMode: "ReadWriteMany"
 
 securityContext:
   fsGroup: 1000
