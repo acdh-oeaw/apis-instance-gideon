@@ -11,7 +11,7 @@ dependencies = [
    "apis-acdhch-default-settings==2.15.0",
    "psycopg2>=2.9,<3.0",
    "django-interval>=0.5.1",
-   "django-auditlog==3.3.0",
+   "django-auditlog==3.4.0",
 ]
 
 [build-system]
