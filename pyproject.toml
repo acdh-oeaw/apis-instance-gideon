@@ -9,7 +9,7 @@ license = "MIT"
 dependencies = [
    "apis-core-rdf==0.64.0",
    "apis-acdhch-default-settings==2.20.0",
-   "psycopg[binary]",
+   "psycopg[binary]~=3.0",
    "django-interval>=0.5.1",
    "django-auditlog==3.4.1",
 ]
