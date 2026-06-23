@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from apis_core.apis_entities.abc import E53_Place, E21_Person, SimpleLabelModel
+from apis_core.entities.abc import E53_Place, E21_Person, SimpleLabelModel
 from apis_core.history.models import VersionMixin
 from apis_core.generic.abc import GenericModel
 from django.utils.translation import gettext_lazy as _
@@ -11,19 +11,19 @@ from django_interval.fields import FuzzyDateParserField
 from apis_core.entities.abc import Entity
 
 
-class ProfessionCategory(GenericModel, SimpleLabelModel):
+class ProfessionCategory(SimpleLabelModel):
     class Meta:
         verbose_name = _("Profession Category")
         verbose_name_plural = _("Profession Categories")
 
 
-class Profession(GenericModel, SimpleLabelModel):
+class Profession(SimpleLabelModel):
     class Meta:
         verbose_name = _("Profession")
         verbose_name_plural = _("Professions")
 
 
-class Person(E21_Person, VersionMixin, AbstractEntity, Entity):
+class Person(E21_Person, VersionMixin, AbstractEntity):
     _default_search_fields = ["forename", "surname", "alternative_names"]
     old_id = models.IntegerField(editable=False)
     # VORNAME = forename
@@ -64,7 +64,7 @@ class Person(E21_Person, VersionMixin, AbstractEntity, Entity):
     field_comments = ArrayField(models.CharField(), null=True, help_text="NG_COMMENTS")
 
 
-class Place(E53_Place, AbstractEntity, Entity):
+class Place(E53_Place, AbstractEntity):
     alternative_labels = ArrayField(models.CharField(), null=True)
 
 
