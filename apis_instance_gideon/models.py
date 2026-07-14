@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from apis_core.entities.abc import E53_Place, E21_Person, SimpleLabelModel
+from apis_core.entities.abc import E53_Place, E21_Person
+from apis_core.generic.abc import SimpleLabelModel
 from apis_core.history.models import VersionMixin
 from apis_core.generic.abc import GenericModel
 from django.utils.translation import gettext_lazy as _
