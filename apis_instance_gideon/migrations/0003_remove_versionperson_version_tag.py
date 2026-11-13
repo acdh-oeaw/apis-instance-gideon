@@ -4,14 +4,16 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('apis_instance_gideon', '0002_alter_person_forename_alter_versionperson_forename'),
+        (
+            "apis_instance_gideon",
+            "0002_alter_person_forename_alter_versionperson_forename",
+        ),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='versionperson',
-            name='version_tag',
+            model_name="versionperson",
+            name="version_tag",
         ),
     ]

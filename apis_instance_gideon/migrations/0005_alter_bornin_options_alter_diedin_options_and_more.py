@@ -4,30 +4,29 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('apis_instance_gideon', '0004_alter_person_options_alter_place_options'),
+        ("apis_instance_gideon", "0004_alter_person_options_alter_place_options"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='bornin',
-            options={'ordering': ['id']},
+            name="bornin",
+            options={"ordering": ["id"]},
         ),
         migrations.AlterModelOptions(
-            name='diedin',
-            options={'ordering': ['id']},
+            name="diedin",
+            options={"ordering": ["id"]},
         ),
         migrations.AlterModelOptions(
-            name='personcorrigendum',
-            options={'ordering': ['id']},
+            name="personcorrigendum",
+            options={"ordering": ["id"]},
         ),
         migrations.AlterModelOptions(
-            name='personpublication',
-            options={'ordering': ['id']},
+            name="personpublication",
+            options={"ordering": ["id"]},
         ),
         migrations.AlterModelOptions(
-            name='personquote',
-            options={'ordering': ['id']},
+            name="personquote",
+            options={"ordering": ["id"]},
         ),
     ]

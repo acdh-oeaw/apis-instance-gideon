@@ -4,18 +4,25 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('apis_instance_gideon', '0003_remove_versionperson_version_tag'),
+        ("apis_instance_gideon", "0003_remove_versionperson_version_tag"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='person',
-            options={'ordering': ['surname', 'forename'], 'verbose_name': 'person', 'verbose_name_plural': 'persons'},
+            name="person",
+            options={
+                "ordering": ["surname", "forename"],
+                "verbose_name": "person",
+                "verbose_name_plural": "persons",
+            },
         ),
         migrations.AlterModelOptions(
-            name='place',
-            options={'ordering': ['label'], 'verbose_name': 'place', 'verbose_name_plural': 'places'},
+            name="place",
+            options={
+                "ordering": ["label"],
+                "verbose_name": "place",
+                "verbose_name_plural": "places",
+            },
         ),
     ]

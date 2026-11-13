@@ -4,20 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('apis_instance_gideon', '0001_initial'),
+        ("apis_instance_gideon", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='person',
-            name='forename',
-            field=models.CharField(blank=True, default='', max_length=4096, verbose_name='forename'),
+            model_name="person",
+            name="forename",
+            field=models.CharField(
+                blank=True, default="", max_length=4096, verbose_name="forename"
+            ),
         ),
         migrations.AlterField(
-            model_name='versionperson',
-            name='forename',
-            field=models.CharField(blank=True, default='', max_length=4096, verbose_name='forename'),
+            model_name="versionperson",
+            name="forename",
+            field=models.CharField(
+                blank=True, default="", max_length=4096, verbose_name="forename"
+            ),
         ),
     ]

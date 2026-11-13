@@ -1,15 +1,15 @@
-from django.db import models
 from django.contrib.postgres.fields import ArrayField
-from apis_core.entities.abc import E53_Place, E21_Person
-from apis_core.generic.abc import SimpleLabelModel
-from apis_core.history.models import VersionMixin
-from apis_core.generic.abc import GenericModel
+from django.db import models
 from django.utils.translation import gettext_lazy as _
-#from apis_core.relations import abc as rel_abc
-from apis_core.relations.models import Relation
-from apis_core.apis_entities.models import AbstractEntity
 from django_interval.fields import FuzzyDateParserField
-from apis_core.entities.abc import Entity
+
+from apis_core.apis_entities.models import AbstractEntity
+from apis_core.entities.abc import E21_Person, E53_Place
+from apis_core.generic.abc import GenericModel, SimpleLabelModel
+from apis_core.history.models import VersionMixin
+
+# from apis_core.relations import abc as rel_abc
+from apis_core.relations.models import Relation
 
 
 class ProfessionCategory(SimpleLabelModel):
@@ -31,7 +31,9 @@ class Person(E21_Person, VersionMixin, AbstractEntity):
     # NACHNAME = surname
     birth_date = None
     death_date = None
-    alternative_names = ArrayField(models.CharField(), null=True, help_text="WEITERE_NAMENSFORMEN")
+    alternative_names = ArrayField(
+        models.CharField(), null=True, help_text="WEITERE_NAMENSFORMEN"
+    )
     # K_GESCHLECHT = gender
     title = models.CharField(null=True, help_text="ADELSPRAEDIKAT")
     aristocratical = models.BooleanField(null=True, help_text="IST_ADELIG")
@@ -39,13 +41,21 @@ class Person(E21_Person, VersionMixin, AbstractEntity):
     religion_comment = models.CharField(null=True, help_text="RELIGION_ANMERKUNG")
     religion_change = models.BooleanField(null=True, help_text="RELIGIONSWECHSEL")
     order = models.CharField(null=True, help_text="K_ORDEN_ID")
-    professioncategory = models.ForeignKey(ProfessionCategory, on_delete=models.CASCADE, null=True, blank=True, help_text="K_BERUFSGRUPPEN_ID")
+    professioncategory = models.ForeignKey(
+        ProfessionCategory,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        help_text="K_BERUFSGRUPPEN_ID",
+    )
     profession = models.ManyToManyField(Profession, blank=True, help_text="BERUF")
     kinfolk = models.TextField(null=True, help_text="VERWANDSCHAFT")
     education = models.TextField(null=True, help_text="AUSBILDUNG")
     career_path = models.TextField(null=True, help_text="BERUF_LAUFBAHN")
     life_center = models.TextField(null=True, help_text="GEOGRAPH_LEBENSMITTELPUNKT")
-    special_accomplishments = models.TextField(null=True, help_text="BESONDERE_LEISTUNGEN")
+    special_accomplishments = models.TextField(
+        null=True, help_text="BESONDERE_LEISTUNGEN"
+    )
     characteristics = models.TextField(null=True, help_text="PERS_EIGENSCHAFTEN")
     honours = models.TextField(null=True, help_text="EHRUNGEN")
     appreciations = models.TextField(null=True, help_text="WUERDIGUNGEN")
