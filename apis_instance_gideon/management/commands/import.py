@@ -1,12 +1,27 @@
-from django.contrib.contenttypes.models import ContentType
-from django.core.management.base import BaseCommand
-from collections import defaultdict
 import csv
 import json
 import pathlib
-from apis_instance_gideon.models import Person, Place, Profession, ProfessionCategory, BornIn, DiedIn, Corrigendum, PersonCorrigendum, Publication, PersonPublication, Quote, PersonQuote
+from collections import defaultdict
+
+from django.contrib.contenttypes.models import ContentType
+from django.core.management.base import BaseCommand
+
 from apis_core.collections.models import SkosCollection
 from apis_core.uris.models import Uri
+from apis_instance_gideon.models import (
+    BornIn,
+    Corrigendum,
+    DiedIn,
+    Person,
+    PersonCorrigendum,
+    PersonPublication,
+    PersonQuote,
+    Place,
+    Profession,
+    ProfessionCategory,
+    Publication,
+    Quote,
+)
 
 
 def create_bd_rel(p, row):
@@ -26,9 +41,29 @@ def create_bd_rel(p, row):
         comment_date = row[f"ANMERKUNG_{bd2}DATUM"]
         comment_place = row[f"ANMERKUNG_{bd2}ORT"]
         if bd == "GEBURT":
-            rel, _ = BornIn.objects.get_or_create(subj_content_type=p.content_type, subj_object_id=p.id, obj_content_type=place.content_type, obj_object_id=place.id, date=date, comment=comment, data_ok=data_ok, comment_date=comment_date, comment_place=comment_place)
+            rel, _ = BornIn.objects.get_or_create(
+                subj_content_type=p.content_type,
+                subj_object_id=p.id,
+                obj_content_type=place.content_type,
+                obj_object_id=place.id,
+                date=date,
+                comment=comment,
+                data_ok=data_ok,
+                comment_date=comment_date,
+                comment_place=comment_place,
+            )
         if bd == "STERBE":
-            rel, _ = DiedIn.objects.get_or_create(subj_content_type=p.content_type, subj_object_id=p.id, obj_content_type=place.content_type, obj_object_id=place.id, date=date, comment=comment, data_ok=data_ok, comment_date=comment_date, comment_place=comment_place)
+            rel, _ = DiedIn.objects.get_or_create(
+                subj_content_type=p.content_type,
+                subj_object_id=p.id,
+                obj_content_type=place.content_type,
+                obj_object_id=place.id,
+                date=date,
+                comment=comment,
+                data_ok=data_ok,
+                comment_date=comment_date,
+                comment_place=comment_place,
+            )
 
 
 doubles = defaultdict(list)
@@ -83,7 +118,9 @@ def parse_d_biografien(filename):
                 p, _ = Person.objects.get_or_create(old_id=id_)
                 p.forename = row["VORNAME"]
                 p.surname = row["NACHNAME"]
-                p.alternative_names = row["WEITERE_NAMENSFORMEN"].split() + weitere_namen.get(row["ID"], [])
+                p.alternative_names = row[
+                    "WEITERE_NAMENSFORMEN"
+                ].split() + weitere_namen.get(row["ID"], [])
                 p.gender = "male" if row["K_GESCHLECHT_ID"] == "1" else "female"
                 p.title = row["ADELSPRAEDIKAT"]
                 p.ist_adelig = True if row["IST_ADELIG"] == -1 else False
@@ -116,13 +153,19 @@ def parse_d_biografien(filename):
                     profession, _ = Profession.objects.get_or_create(label=beruf)
                     p.profession.add(profession)
                 if berufsgruppen_id := row["K_BERUFSGRUPPEN_ID"]:
-                    professioncategory, _ = ProfessionCategory.objects.get_or_create(label=professioncategories[berufsgruppen_id])
+                    professioncategory, _ = ProfessionCategory.objects.get_or_create(
+                        label=professioncategories[berufsgruppen_id]
+                    )
                     p.professioncategory = professioncategory
                 p.save()
                 domains[int(row["DOMAIN"])].add(p)
                 create_bd_rel(p, row)
                 if row["PNDID"]:
-                    Uri.objects.get_or_create(uri=f"https://d-nb.info/gnd/{row['PNDID']}", content_type=person_content_type, object_id=p.id)
+                    Uri.objects.get_or_create(
+                        uri=f"https://d-nb.info/gnd/{row['PNDID']}",
+                        content_type=person_content_type,
+                        object_id=p.id,
+                    )
             else:
                 original_id = int(row["D_BIOGRAFIEN_ORIGINAL_ID"])
                 _id = int(row["ID"])
@@ -156,8 +199,18 @@ def parse_biografie_literatur(filename):
             try:
                 p = Person.objects.get(old_id=p_id)
                 attachments = all_attachments.get(row["BIOGRAFIE_ID"], [])
-                q, _ = Quote.objects.get_or_create(old_id=row["ID"], quotation=row["ZITAT"], quotation_shortform=row["KURZFORM"], attachments=attachments)
-                pq, _ = PersonQuote.objects.get_or_create(subj_content_type=p.content_type, subj_object_id=p.id, obj_content_type=q.content_type, obj_object_id=q.id)
+                q, _ = Quote.objects.get_or_create(
+                    old_id=row["ID"],
+                    quotation=row["ZITAT"],
+                    quotation_shortform=row["KURZFORM"],
+                    attachments=attachments,
+                )
+                pq, _ = PersonQuote.objects.get_or_create(
+                    subj_content_type=p.content_type,
+                    subj_object_id=p.id,
+                    obj_content_type=q.content_type,
+                    obj_object_id=q.id,
+                )
             except Person.DoesNotExist:
                 print(f"Biographien ID: {p_id} does not exist")
 
@@ -180,8 +233,20 @@ def parse_biografien_corrigenda(filename):
                 review_by = row["UEBERPRUEFUNG"]
                 source = row["QUELLE"]
                 category = kategorien[row["K_CORRIGENDA_KATEGORIEN_ID"]]
-                c, _ = Corrigendum.objects.get_or_create(old_id=old_id, data_old=data_old, data_new=data_new, review_by=review_by, source=source, category=category)
-                pc, _ = PersonCorrigendum.objects.get_or_create(subj_content_type=p.content_type, subj_object_id=p.id, obj_content_type=c.content_type, obj_object_id=c.id)
+                c, _ = Corrigendum.objects.get_or_create(
+                    old_id=old_id,
+                    data_old=data_old,
+                    data_new=data_new,
+                    review_by=review_by,
+                    source=source,
+                    category=category,
+                )
+                pc, _ = PersonCorrigendum.objects.get_or_create(
+                    subj_content_type=p.content_type,
+                    subj_object_id=p.id,
+                    obj_content_type=c.content_type,
+                    obj_object_id=c.id,
+                )
             except Person.DoesNotExist:
                 print(f"Biographien ID: {p_id} does not exist")
 
@@ -196,12 +261,28 @@ def parse_biografien_publikationen(filename):
                 p = Person.objects.get(old_id=p_id)
                 old_id = row["ID"]
                 volume = int(row["BAND_VC"]) if row["BAND_VC"] != "" else None
-                delivery = int(row["LIEFERUNG_VC"]) if row["LIEFERUNG_VC"] != "" else None
+                delivery = (
+                    int(row["LIEFERUNG_VC"]) if row["LIEFERUNG_VC"] != "" else None
+                )
                 page_bio = row["SEITE_BIO"]
                 page_number = row["SEITENANGABEN"]
-                mentioned = int(row["MITERWAEHNT"]) if row["MITERWAEHNT"] != "" else None
-                pu, _ = Publication.objects.get_or_create(old_id=old_id, volume=volume, delivery=delivery, page_bio=page_bio, page_number=page_number, mentioned=mentioned)
-                pp, _ = PersonPublication.objects.get_or_create(subj_content_type=p.content_type, subj_object_id=p.id, obj_content_type=pu.content_type, obj_object_id=pu.id)
+                mentioned = (
+                    int(row["MITERWAEHNT"]) if row["MITERWAEHNT"] != "" else None
+                )
+                pu, _ = Publication.objects.get_or_create(
+                    old_id=old_id,
+                    volume=volume,
+                    delivery=delivery,
+                    page_bio=page_bio,
+                    page_number=page_number,
+                    mentioned=mentioned,
+                )
+                pp, _ = PersonPublication.objects.get_or_create(
+                    subj_content_type=p.content_type,
+                    subj_object_id=p.id,
+                    obj_content_type=pu.content_type,
+                    obj_object_id=pu.id,
+                )
             except Person.DoesNotExist:
                 print(f"Biographien ID: {p_id} does not exist")
 
