@@ -3,7 +3,6 @@ from django.db import models
 from django.utils.translation import gettext_lazy as _
 from django_interval.fields import FuzzyDateParserField
 
-from apis_core.apis_entities.models import AbstractEntity
 from apis_core.entities.abc import E21_Person, E53_Place
 from apis_core.generic.abc import GenericModel, SimpleLabelModel
 from apis_core.history.models import VersionMixin
@@ -24,7 +23,7 @@ class Profession(SimpleLabelModel):
         verbose_name_plural = _("Professions")
 
 
-class Person(E21_Person, VersionMixin, AbstractEntity):
+class Person(E21_Person, VersionMixin):
     _default_search_fields = ["forename", "surname", "alternative_names"]
     old_id = models.IntegerField(editable=False)
     # VORNAME = forename
@@ -75,7 +74,7 @@ class Person(E21_Person, VersionMixin, AbstractEntity):
     field_comments = ArrayField(models.CharField(), null=True, help_text="NG_COMMENTS")
 
 
-class Place(E53_Place, AbstractEntity):
+class Place(E53_Place):
     alternative_labels = ArrayField(models.CharField(), null=True)
 
 
